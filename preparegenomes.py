@@ -3,7 +3,7 @@ import subprocess
 import os
 import glob
 import sys
-
+print("Hello friend")
 ###########################
 #Argument parsing
 ###########################
