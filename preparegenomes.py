@@ -194,6 +194,10 @@ def run_preparegenomes(in_f, path, config, cores):
 
         # retrieve db_path
     path_out = set_up_preparegenomes(path,in_f)
+    
+    ### lines for testing ###
+    #print(path_out)
+    #sys.exit("***STOPPING HERE***")
 
         # Append db_path to config for Snakefile running
     yaml = ruamel.yaml.YAML()
@@ -213,21 +217,22 @@ def run_preparegenomes(in_f, path, config, cores):
 
     # Run snakemake
     log_file = open(str(log),'w+')
-    log_file.write("Have a nice run!\n\t\tHOLOFOW Preparegenomes starting")
+    log_file.write("Have a nice run!\n\t\tHOLOFLOW Preparegenomes starting")
     log_file.close()
 
     prg_snk_Cmd = 'snakemake -s '+path_snkf+' -k '+path_out[1]+' --configfile '+config+' --cores '+cores+''
     subprocess.check_call(prg_snk_Cmd, shell=True)
 
     log_file = open(str(log),'a+')
-    log_file.write("\n\t\tHOLOFOW Preparegenomes has finished :)")
+    log_file.write("\n\t\tHOLOFLOW Preparegenomes has finished :)")
     log_file.close()
 
 
     #Check how the run went
-
-    for file in path_out.split(" "):
-        exist.append(os.path.isfile(file))
+    
+    # Changed the split() call function originally present here.
+    for file in path_out:
+        exist.append(os.path.isfile(arx))
 
     if not all(exist): # all output files exist
 
