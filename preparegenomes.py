@@ -232,7 +232,7 @@ def run_preparegenomes(in_f, path, config, cores):
     
     # Changed the split() call function originally present here.
     for file in path_out:
-        exist.append(os.path.isfile(arx))
+        exist.append(os.path.isfile(file))
 
     if not all(exist): # all output files exist
 
