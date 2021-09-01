@@ -3,7 +3,7 @@ import subprocess
 import os
 import glob
 import sys
-print("Hello friend haha")
+#print("Hello friend haha")
 ###########################
 #Argument parsing
 ###########################
@@ -192,14 +192,10 @@ def run_preparegenomes(in_f, path, config, cores):
     """Run snakemake on shell"""
 
 
-        # retrieve db_path
+    # retrieve db_path
     path_out = set_up_preparegenomes(path,in_f)
     
-    ### lines for testing ###
-    #print(path_out)
-    #sys.exit("***STOPPING HERE***")
-
-        # Append db_path to config for Snakefile running
+    # Append db_path to config for Snakefile running
     yaml = ruamel.yaml.YAML()
     yaml.explicit_start = True
     with open(str(config), 'r') as config_file:
@@ -231,18 +227,15 @@ def run_preparegenomes(in_f, path, config, cores):
     #Check how the run went
     
     # Changed the split() call function originally present here.
-    for file in path_out:
-        exist.append(os.path.isfile(file))
+    # Now we are stripping the files, defining a list on the fly 
+    # and adding a logical vector (True/False) to the list
+    exist = [os.path.isfile(x.strip()) for x in path_out]
 
     if not all(exist): # all output files exist
 
         log_file = open(str(log),'a+')
         log_file.write("Looks like something went wrong...\n\t\t")
         log_file.close()
-
-
-
-
 
 ###########################
 #### Workflows running
