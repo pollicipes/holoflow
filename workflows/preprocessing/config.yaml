@@ -1,74 +1,50 @@
-
-
-threads:
-  40
+---
+threads: '1'
 
 #qual_filt options # If Illumina adapters, set to 'default'
-adapter1:
-  'default'
-adapter2:
-  'default'
-maxns:
-  5
-minquality:
-  30
+adapter1: None
+adapter2: None
+maxns: 5
+minquality: 30
 
 # Character separating the mate number (1 or 2) from the read name in FASTQ records.
-mate_separator:
-  '/'
+mate_separator: /
 
 
 # dup_rem_paired options
   # By-name-n and By-seq-s are mutually exclusive !
 # dereplicate based on sequence full name instead of just ID
-by_n:
-  False
+by_n: false
 # dereplicate based on sequence
-by_s:
-  True
+by_s: true
 
 # if not False, write path instead of True !
 # file to dups writes a file with the duplicate sequences
-file_to_dups:
-  False
+file_to_dups: false
 
-ignore_case:
-  True
+ignore_case: true
 
 #dup_rem_paired_repair options
-separator:
-  ^
+separator: ^
 
 #map_host options   # - get from preparegenomes.py
-refgenomes:
-  /home/projects/ku-cbd/people/nurher/bats/prepa_holoflow_test/all_genomes.fna
+refgenomes: /home/people/juarod/data/holotest/PRG/all_genomes.fna
 
     # These values correspond to the default options for bwa mem, customise if desired
-t:
-  40
+t: 40
   # Either: loose / semistringent / superstringent. Correspond to 19, 21, 23 respectively.
   # Default loose{19}
-k:
-  'loose'
-w:
-  100
-d:
-  100
-A:
-  1
-B:
-  4
-O:
-  6
-E:
-  1
-L:
-  5
+k: loose
+w: 100
+d: 100
+A: 1
+B: 4
+O: 6
+E: 1
+L: 5
 # Generate picard-friendly bam - used for further Variant Calling with GATK on Genomics workflow
-M:
-  True
-R:
-  '@RG\tID:ProjectName\tCN:AuthorName\tDS:Mappingt\tPL:Illumina1.9\tSM:Sample'
+M: true
+R: '@RG\tID:ProjectName\tCN:AuthorName\tDS:Mappingt\tPL:Illumina1.9\tSM:Sample'
 
-holopath:
-  /home/projects/ku-cbd/people/nurher/holoflow
+holopath: /home/people/juarod/software/holoflow
+logpath: /home/people/juarod/data/holotest/Holoflow_preprocessing.log
