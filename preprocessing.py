@@ -285,7 +285,7 @@ def run_preprocessing(in_f, path, config, cores):
 
     # Run snakemake
     log_file = open(str(log),'w+')
-    log_file.write("Have a nice run!\n\t\tHOLOFOW Preprocessing starting")
+    log_file.write("Have a nice run!\n\t\tHOLOFLOW Preprocessing starting\n")
     log_file.close()
 
     # call snakemake from terminal with subprocess package
@@ -293,7 +293,7 @@ def run_preprocessing(in_f, path, config, cores):
     subprocess.Popen(prep_snk_Cmd, shell=True).wait()
 
     log_file = open(str(log),'a+')
-    log_file.write("\n\t\tHOLOFOW Preprocessing has finished :)")
+    log_file.write("\n\t\tHOLOFLOW Preprocessing has finished :)\n")
     log_file.close()
 
     # Keep temporary directories - not the last one -  / or remove them
