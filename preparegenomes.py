@@ -227,9 +227,9 @@ def run_preparegenomes(in_f, path, config, cores):
 
 
     #Check how the run went
-
-    for file in path_out.split(" "):
-        exist.append(os.path.isfile(file))
+    exist = [os.path.isfile(x.strip()) for x in path_out]
+    #for file in path_out.split(" "):
+    #    exist.append(os.path.isfile(file))
 
     if not all(exist): # all output files exist
 
