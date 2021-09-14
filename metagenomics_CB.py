@@ -17,7 +17,7 @@ parser.add_argument('-c', help="config file", dest="config_file", required=False
 parser.add_argument('-k', help="keep tmp directories", dest="keep", action='store_true')
 parser.add_argument('-l', help="pipeline log file", dest="log", required=False)
 parser.add_argument('-t', help="threads", dest="threads", required=True)
-parser.add_argument('-W', help="threads", dest="REWRITE", action='store_true')
+parser.add_argument('-W', help="rewrite everything", dest="REWRITE", action='store_true')
 args = parser.parse_args()
 
 in_f=args.input_txt
