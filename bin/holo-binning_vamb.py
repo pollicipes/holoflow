@@ -43,7 +43,7 @@ if not os.path.exists(bb):
 
 # If no bins in directory, then run vamb
     if not glob.glob(str(bb)+"*.fa"):
-        vambCmd='module unload gcc && module load tools anaconda3/4.4.0 perl/5.20.2 metabat/2.12.1 && vamb  -o _ --outdir '+bb+' --fasta '+a+' --jgi '+d+' --minfasta 200000'
+        vambCmd='module unload gcc && module load tools anaconda3/4.4.0 perl/5.20.2 metabat/2.12.1 && vamb  -o _ --outdir '+bb+' --fasta '+a+' --jgi '+d+' --minfasta 200000 -t 50'
         subprocess.check_call(vambCmd, shell=True)
 
             # Modify bin names and create contig to bin table
