@@ -14,7 +14,7 @@ parser.add_argument('-cb', help="checked bins", dest="check_b")
 parser.add_argument('-bt_mtb', help="metabat bin table", dest="bt_mtb", required=True)
 parser.add_argument('-bt_mxb', help="maxbin bin table", dest="bt_mxb", required=True)
 parser.add_argument('--bt_cct', help="concoct bin table", dest="bt_cct")
-parser.add_argument('--bt_vmb', help="vamb bin table", dest="bt_vmb")
+#parser.add_argument('--bt_vmb', help="vamb bin table", dest="bt_vmb")
 #parser.add_argument('-p', help="prodigal predicted proteins", dest="p", required=True)
 parser.add_argument('-o', help="output main dir", dest="o", required=True)
 parser.add_argument('-se', help="search engine", dest="se", required=True)
@@ -53,13 +53,14 @@ if args.check_b: # means all binners have bins, either duplicated or own
     # Coassembly
     if args.bt_cct:
         bt_cct=args.bt_cct
-
-        dastoolDependencies='module unload maxbin/2.2.7 fraggenescan/1.31 perl/5.20.2 && module load tools gcc/5.4.0 intel/perflibs/2018 R/3.6.1 ruby/3.0.0 pullseq/1.0.2 perl/5.24.0 ncbi-blast/2.6.0+ prodigal/2.6.3 das_tool/1.1.2 diamond/0.9.24 usearch/11.0.667'
-        dastoolCmd=''+dastoolDependencies+' && DAS_Tool -i '+args.bt_vmb+','+bt_cct+','+bt_mxb+','+bt_mtb+' -c '+a+' -o '+o+' -l vamb,concoct,maxbin,metabat --search_engine '+se+' -t '+t+' --db_directory '+db+' --write_bins 1'
+# '+dastoolDependencies+'
+# module unload maxbin/2.2.7 fraggenescan/1.31 perl/5.20.2 &&    gcc/5.4.0 intel/perflibs/2018 perl/5.24.0   usearch/11.0.667
+        dastoolCmd='module load tools ruby/2.7.2 gcc/6.2.0 intel/perflibs/2020_update4 perl/5.30.2 R/3.6.1 ncbi-blast/2.6.0+ pullseq/1.0.2 prodigal/2.6.3 das_tool/1.1.2 diamond/0.9.24 && \
+        DAS_Tool -i '+bt_cct+','+bt_mxb+','+bt_mtb+' -c '+a+' -o '+o+' -l concoct,maxbin,metabat --search_engine '+se+' -t '+t+' --db_directory '+db+' --write_bins 1'
         #dastoolCmd=''+dastoolDependencies+' && DAS_Tool -i '+bt_cct+','+bt_mxb+','+bt_mtb+' -c '+a+' -o '+o+' --proteins '+p+' -l concoct,maxbin,metabat --search_engine '+se+' -t '+t+' --db_directory '+db+' --write_bins 1'
         subprocess.check_call(dastoolCmd, shell=True)
-
-
+#'+args.bt_vmb+',
+#ruby/3.0.0
         # Move definitive bins to final directory
         # Remove '.contigs' from bin ID, which was added by DASTool
         ori_dir=o+"_DASTool_bins"
@@ -95,9 +96,9 @@ if args.check_b: # means all binners have bins, either duplicated or own
                 with open(str(o+'_concoct.eval'),'r') as cct_eval:
                     logf.write(''+cct_eval.read()+'\n\n\n')
 
-                logf.write('\t\tDASTool Vamb bins evaluation - ID '+ID+'\n\n')
-                with open(str(o+'_vamb.eval'),'r') as vmb_eval:
-                    logf.write(''+vmb_eval.read()+'\n\n\n')
+                # logf.write('\t\tDASTool Vamb bins evaluation - ID '+ID+'\n\n')
+                # with open(str(o+'_vamb.eval'),'r') as vmb_eval:
+                #     logf.write(''+vmb_eval.read()+'\n\n\n')
 
                 if os.path.exists(str(o+'_DASTool_summary.txt')):
                     logf.write('\t\tDASTool Bin Merging Summary - ID '+ID+'\n\n')
