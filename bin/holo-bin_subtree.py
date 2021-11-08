@@ -13,7 +13,8 @@ parser = argparse.ArgumentParser(description='Runs holoflow pipeline.')
 parser.add_argument('-tree_dir', help="gtdbtk phylogenetic trees directory", dest="tree_dir", required=True)
 parser.add_argument('-bin_dir', help="dereplicated bins dir", dest="bin_dir", required=True)
 parser.add_argument('-bac_o', help="output BAC subtree", dest="bac_o", required=True)
-parser.add_argument('-ar_o', help="output AR subtree", dest="ar_o", required=True)
+#parser.add_argument('-ar_o', help="output AR subtree", dest="ar_o", required=True)
+parser.add_argument('-holopath', help="holopath", dest="holopath", required=True)
 parser.add_argument('-ID', help="ID", dest="ID", required=True)
 parser.add_argument('-log', help="pipeline log file", dest="log", required=True)
 args = parser.parse_args()
@@ -22,7 +23,8 @@ args = parser.parse_args()
 tree_dir=args.tree_dir
 bin_dir=args.bin_dir
 bac_o=args.bac_o
-ar_o=args.ar_o
+#ar_o=args.ar_o
+holopath=args.holopath
 ID=args.ID
 log=args.log
 
@@ -32,8 +34,9 @@ if not (os.path.isfile(bac_o)):
 
     # Define in and out tree paths
     in_paths = sorted(glob.glob(tree_dir+'/*.tree'))
-    out_paths = [ar_o,bac_o]
-
+    out_paths = [bac_o]
+#    out_paths = [ar_o,bac_o]
+#
     # In case bins come from individually assembled samples: get all sample IDs in group
     # If bins come from coassembly, only one ID will be in the list
     bin_names = [os.path.basename(x) for x in glob.glob(bin_dir+'/*.fa')]
@@ -86,5 +89,5 @@ if not (os.path.isfile(bac_o)):
 
 
         if final_tips:
-            subtreeCmd='module load tools gcc/5.4.0 intel/compiler/64/2018_update2 R/3.5.3-ICC-MKL && Rscript '+curr_dir+'/holo-bin_subtree.R --tips '+final_tips+' -in_tree '+tree_path+' -out_tree '+out_tree_path+''
+            subtreeCmd='module load tools gcc/5.4.0 intel/compiler/64/2018_update2 R/3.5.3-ICC-MKL && Rscript '+holopath+'/holo-bin_subtree.R --tips '+final_tips+' -in_tree '+tree_path+' -out_tree '+out_tree_path+''
             subprocess.Popen(subtreeCmd,shell=True).wait()

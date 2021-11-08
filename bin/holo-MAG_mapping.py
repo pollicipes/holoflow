@@ -70,9 +70,8 @@ IDXmag_catalogue_file=out_magC+'/'+ID+'_MAG_Catalogue.fa.fai'
 
 if not (os.path.isfile(str(IDXmag_catalogue_file))):
     idxsamCmd='module load tools samtools/1.11 && samtools faidx '+mag_catalogue_file+''
-    idxbwaCmd='module load tools bwa/0.7.15 && bwa index '+mag_catalogue_file+''
-
-    subprocess.Popen(idxbwaCmd, shell=True).wait()
+    idxbt2Cmd='module load tools bowtie2/2.4.2 && bowtie2-build --large-index --threads '+threads+' '+mag_catalogue_file+' '+mag_catalogue_file+''
+    subprocess.Popen(idxbt2Cmd, shell=True).wait()
     subprocess.Popen(idxsamCmd, shell=True).wait()
 
 
@@ -108,7 +107,15 @@ if (os.path.isfile(str(IDXmag_catalogue_file))):
             read1 = fq_dir+'/'+sample+'_1.fastq'
             read2 = fq_dir+'/'+sample+'_2.fastq'
 
-        mapbinCmd='module load tools samtools/1.11 bwa/0.7.15 && bwa mem -t '+threads+' -R "@RG\tID:ProjectName\tCN:AuthorName\tDS:Mappingt\tPL:Illumina1.9\tSM:ID" '+mag_catalogue_file+' '+read1+' '+read2+' | samtools view -b - | samtools sort -T '+out_dir+'/'+ID+' -o '+out_bam+''
+        mapbinCmd='module load tools samtools/1.11 bowtie2/2.4.2 \
+        && bowtie2 \
+        --time \
+        --threads '+threads+' \
+        --rg-id "'+ID+'" \
+        -x '+mag_catalogue_file+' \
+        -1 '+read1+' \
+        -2 '+read2+' \
+        | samtools view -b -@ '+threads+' - | samtools sort -@ '+threads+' -T '+out_dir+'/'+ID+' -o '+out_bam+''
         subprocess.Popen(mapbinCmd, shell=True).wait()
 
         # extract not-mapped to the reference genome reads + keep reference bam - TO NEW DIRECTORY
@@ -120,21 +127,27 @@ if (os.path.isfile(str(IDXmag_catalogue_file))):
             pass
         read1_not=not_map+'/'+sample+'_notMAGmap_1.fastq.gz'
         read2_not=not_map+'/'+sample+'_notMAGmap_2.fastq.gz'
-        refbamCmd = 'module load tools samtools/1.11 && samtools view -T '+mag_catalogue_file+' -b -f12 '+out_bam+' | samtools fastq -1 '+read1_not+' -2 '+read2_not+' -'
+        refbamCmd = 'module load tools samtools/1.11 \
+        && samtools view -@ '+threads+' -T '+mag_catalogue_file+' -b -f12 '+out_bam+' | samtools fastq -@ '+threads+' -1 '+read1_not+' -2 '+read2_not+' -'
         subprocess.Popen(refbamCmd, shell=True).wait()
 
 
 ######################## Stats ########################
 
+        # Index bam files
+        indexCmd='module load tools samtools/1.11 && samtools index -@ '+threads+' '+out_bam+''
+        subprocess.Popen(indexCmd, shell=True).wait()
+
+
         # Get total number of initial reads bases
         # samtools view -c
-        totalCmd='module load tools samtools/1.11 && samtools view -c '+out_bam+' >> '+total_reads_tmp+''
+        totalCmd='module load tools samtools/1.11 && samtools view -@ '+threads+' -c '+out_bam+' >> '+total_reads_tmp+''
         subprocess.Popen(totalCmd, shell=True).wait()
 
 
         # Get mapped number of reads
         # samtools view -c -F 4
-        mappedCmd='module load tools samtools/1.11 && samtools view -c -F 4 '+out_bam+' >> '+mapped_reads_tmp+''
+        mappedCmd='module load tools samtools/1.11 && samtools view -@ '+threads+' -c -F 4 '+out_bam+' >> '+mapped_reads_tmp+''
         subprocess.Popen(mappedCmd, shell=True).wait()
 
 
